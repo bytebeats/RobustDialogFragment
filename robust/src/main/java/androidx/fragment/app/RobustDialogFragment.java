@@ -40,6 +40,8 @@ import androidx.savedstate.ViewTreeSavedStateRegistryOwner;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.ref.WeakReference;
+import java.util.Collections;
+import java.util.List;
 
 import static androidx.annotation.RestrictTo.Scope.LIBRARY_GROUP_PREFIX;
 import static androidx.fragment.app.FragmentManager.TAG;
@@ -223,6 +225,7 @@ public class RobustDialogFragment extends Fragment
      * This does <em>not</em> add the transaction to the fragment back stack.  When the fragment
      * is dismissed, a new transaction will be executed to remove it from
      * the activity.
+     * Note that <em>when Activity or Fragment has been destroyed or state-saved, DON'T show {@link #mDialog}</em>
      * @param manager The FragmentManager this fragment will be added to.
      * @param tag The tag for this fragment, as per
      * {@link FragmentTransaction#add(Fragment, String) FragmentTransaction.add}.
@@ -332,7 +335,68 @@ public class RobustDialogFragment extends Fragment
             } else {
                 ft.commit();
             }
+            removeFragmentsFromLayout();
         }
+    }
+
+    /**
+     * For  Exception: Caused by: java.lang.IllegalArgumentException: Binary XML file line #30: Duplicate id 0x7f080047
+     * Which is caused by Fragment(s) from layout xml who was added to FragmentManager but not removed later by DialogFragment itself.
+     * So, For IllegalArgumentException, we have to remove Fragments from <fragment .../>, manually and forcefully.
+     */
+    private void removeFragmentsFromLayout() {
+        FragmentManager fm = getParentFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        Fragment f;
+        for (Integer id : requireIdsForInLayoutFragments()) {
+            f = fm.findFragmentById(id);
+            if (f == null || !f.isInLayout() || f.isRemoving() || f.isDetached()) {
+                //in case Fragment is removing by some other ways or has detached from window
+                continue;
+            }
+            ft.remove(f);
+        }
+        for (String tag : requireTagsForInLayoutFragments()) {
+            f = fm.findFragmentByTag(tag);
+            if (f == null || !f.isInLayout() || f.isRemoving() || f.isDetached()) {
+                //in case Fragment is removing by some other ways or has detached from window
+                continue;
+            }
+            ft.remove(f);
+        }
+        for (String who : requireWhosForInLayoutFragments()) {
+            f = fm.findFragmentByWho(who);
+            if (f == null || !f.isInLayout() || f.isRemoving() || f.isDetached()) {
+                //in case Fragment is removing by some other ways or has detached from window
+                continue;
+            }
+            ft.remove(f);
+        }
+        ft.commitAllowingStateLoss();
+    }
+
+    /**
+     * require ids of fragments declared in layout xml file.
+     * @return ids of fragments declared in layout xml file
+     */
+    protected List<Integer> requireIdsForInLayoutFragments() {
+        return Collections.emptyList();
+    }
+
+    /**
+     * require tags of fragments declared in layout xml file.
+     * @return tags of fragments declared in layout xml file
+     */
+    protected List<String> requireTagsForInLayoutFragments() {
+        return Collections.emptyList();
+    }
+
+    /**
+     * require whos of fragments declared in layout xml file.
+     * @return whos of fragments declared in layout xml file
+     */
+    protected List<String> requireWhosForInLayoutFragments() {
+        return Collections.emptyList();
     }
 
     /**
@@ -743,7 +807,7 @@ public class RobustDialogFragment extends Fragment
         public void onDismiss(DialogInterface dialog) {
             RobustDialogFragment dialogFragment = get();
             if (dialogFragment != null && dialogFragment.getDialog() != null) {
-                dialogFragment.onDismiss(dialogFragment.getDialog());
+                dialogFragment.onDismiss(dialogFragment.requireDialog());
             }
         }
     }
@@ -758,7 +822,7 @@ public class RobustDialogFragment extends Fragment
         public void onCancel(DialogInterface dialog) {
             RobustDialogFragment dialogFragment = get();
             if (dialogFragment != null && dialogFragment.getDialog() != null) {
-                dialogFragment.onCancel(dialogFragment.getDialog());
+                dialogFragment.onCancel(dialogFragment.requireDialog());
             }
         }
     }
