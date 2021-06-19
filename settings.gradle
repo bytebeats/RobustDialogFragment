@@ -1,2 +1,3 @@
+include ':robust'
 include ':app'
 rootProject.name = "RobustDialogFragment"
