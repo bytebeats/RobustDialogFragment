@@ -9,3 +9,8 @@ Scenes like:
 * DialogFragment can't work well with in-layout Fragments, which cause IllegalArgumentException, like
     * Binary XML file line #30: Duplicate id 0x7f080047.
 * Sometimes DialogFragment cause memory leaks.
+
+
+## Stargazers over time
+
+[![Stargazers over time](https://starchart.cc/bytebeats/RobustDialogFragment.svg)](https://starchart.cc/bytebeats/RobustDialogFragment)
