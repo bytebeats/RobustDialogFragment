@@ -797,6 +797,9 @@ public class RobustDialogFragment extends Fragment
         }
     }
 
+    /**
+     * In case Message from MessageQueue holding DialogFragment instance which referred Activity/Fragment through FragmentManager cause memory leaks
+     */
     private static class OnDismissWeaklyReachableListener extends WeakReference<RobustDialogFragment> implements DialogInterface.OnDismissListener {
 
         private OnDismissWeaklyReachableListener(RobustDialogFragment referent) {
@@ -812,6 +815,9 @@ public class RobustDialogFragment extends Fragment
         }
     }
 
+    /**
+     * In case Message from MessageQueue holding DialogFragment instance which referred Activity/Fragment through FragmentManager cause memory leaks
+     */
     private static class OnCancelWeaklyReachableListener extends WeakReference<RobustDialogFragment> implements DialogInterface.OnCancelListener {
 
         private OnCancelWeaklyReachableListener(RobustDialogFragment referent) {
