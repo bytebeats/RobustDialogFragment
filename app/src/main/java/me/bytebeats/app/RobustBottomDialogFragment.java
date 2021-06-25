@@ -4,7 +4,7 @@ import android.app.Dialog;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.AppCompatRobustDialogFragment;
+import androidx.appcompat.app.AppcompatRobustDialogFragment;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 /**
@@ -16,7 +16,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
  * @Description TO-DO
  */
 
-public class RobustBottomDialogFragment extends AppCompatRobustDialogFragment {
+public class RobustBottomDialogFragment extends AppcompatRobustDialogFragment {
     public RobustBottomDialogFragment() {
         super(R.layout.dialog_fragment_robust_bottom);
     }

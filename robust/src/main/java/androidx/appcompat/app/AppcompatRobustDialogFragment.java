@@ -1,12 +1,12 @@
-package androidx.fragment.app;
+package androidx.appcompat.app;
 
 import android.app.Dialog;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RestrictTo;
-import androidx.appcompat.app.AppCompatDialog;
 import androidx.annotation.RestrictTo.Scope;
+import androidx.fragment.app.RobustDialogFragment;
 
 /**
  * @Author bytebeats
@@ -14,14 +14,14 @@ import androidx.annotation.RestrictTo.Scope;
  * @Github https://github.com/bytebeats
  * @Created on 2021/6/19 17:24
  * @Version 1.0
- * @Description TO-DO
+ * @Description DialogFragment which is Appcompat and Robust
  */
 
-public class AppCompatRobustDialogFragment extends RobustDialogFragment {
-    public AppCompatRobustDialogFragment() {
+public class AppcompatRobustDialogFragment extends RobustDialogFragment {
+    public AppcompatRobustDialogFragment() {
     }
 
-    public AppCompatRobustDialogFragment(int contentLayoutId) {
+    public AppcompatRobustDialogFragment(int contentLayoutId) {
         super(contentLayoutId);
     }
 
